@@ -1,3 +1,6 @@
+import DiscordBot from "./discord-bot/discord-bot";
+import {App} from "./app";
+
 export default {
   /**
    * An asynchronous register function that runs before
@@ -14,5 +17,12 @@ export default {
    * This gives you an opportunity to set up your data model,
    * run jobs, or perform some special logic.
    */
-  bootstrap(/*{ strapi }*/) {},
+  bootstrap({strapi}) {
+    new App(strapi);
+  },
+
+  /**
+   * An asynchronous function that runs after the application
+   */
+  destroy(/*{ strapi }*/) {},
 };
