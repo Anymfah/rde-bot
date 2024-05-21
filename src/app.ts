@@ -1,9 +1,9 @@
 import {Strapi} from "@strapi/types";
 import DiscordBot from "./discord-bot/discord-bot";
-import {CodApi} from "./cod-api/cod-api";
+import CodApi from "./cod-api/cod-api";
 
 
-export class App {
+export default class App {
 
   /**
    * Strapi instance
@@ -13,12 +13,12 @@ export class App {
   /**
    * Discord bot instance
    */
-  public discordBot: DiscordBot;
+  public discordBot: typeof DiscordBot;
 
   /**
    * CodApi instance
    */
-  public codApi: CodApi;
+  public codApi: typeof CodApi;
 
   /**
    * Constructor
@@ -26,11 +26,17 @@ export class App {
    */
   public constructor(strapi: Strapi) {
     this.strapi = strapi;
-    this.init();
+    this.codApi = CodApi;
+    this.codApi.strapi = strapi;
+    this.discordBot = DiscordBot;
+    this.discordBot.strapi = strapi;
+
+    this._init().then(r => r);
   }
 
-  public init() {
-    this.codApi = new CodApi(this);
-    this.discordBot = new DiscordBot(this);
+  private async _init() {
+    await this.discordBot.init();
+    console.log('App initialized');
+
   }
 }

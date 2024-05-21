@@ -1,0 +1,35 @@
+{
+  "kind": "collectionType",
+  "collectionName": "matches",
+  "info": {
+    "singularName": "match",
+    "pluralName": "matches",
+    "displayName": "Match"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "matchId": {
+      "type": "string",
+      "unique": true,
+      "required": true
+    },
+    "map": {
+      "type": "string"
+    },
+    "mapName": {
+      "type": "string"
+    },
+    "mode": {
+      "type": "string"
+    },
+    "players": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::player.player",
+      "mappedBy": "matches"
+    }
+  }
+}

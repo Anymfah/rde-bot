@@ -1,0 +1,50 @@
+
+
+export interface GenericStats {
+  placement: number;
+  score: number;
+  kills: number;
+  deaths: number;
+  damage: number;
+  assists: number;
+  headshots: number;
+  shots: number;
+  hits: number;
+  totalGamesPlayed?: number;
+  avgKillsPerGame?: number;
+  highestKillStreak: number;
+  highestKillsPerGame?: number;
+  highestScorePerGame?: number;
+  playerUtcConnectTimeSeconds: number;
+  playerUtcDisconnectTimeSeconds: number;
+  scorePerMinute: number;
+  timePlayed: number;
+  totalTimePlayed: number;
+  killDeathRatio: string;
+  matchOutcome: string;
+  alliesScore: number;
+  axisScore: number;
+  team: string;
+  team3Score?: number;
+  team4Score?: number;
+  essence?: number;
+  revives?: number;
+  lootedContainers?: number;
+  zombieKills?: number;
+  soliderKills?: number;
+  bossKills?: number;
+  eliteKills?: number;
+  specialKills?: number;
+  normalKills?: number;
+  criticalKills?: number;
+  papKills?: number;
+  oneShotKills?: number;
+  contractsCompleted?: number;
+  totalAcquisitionsExtracted?: number;
+  totalSchematicsExtracted?: number;
+  wins?: number;
+  losses?: number;
+  winLossRatio?: string;
+  criticalKillsPercentage?: number;
+  level: number;
+}

@@ -1,0 +1,130 @@
+{
+  "kind": "collectionType",
+  "collectionName": "players",
+  "info": {
+    "singularName": "player",
+    "pluralName": "players",
+    "displayName": "Player",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "nametag": {
+      "type": "string"
+    },
+    "unoid": {
+      "type": "string",
+      "unique": true
+    },
+    "password": {
+      "type": "password"
+    },
+    "discordAvatarId": {
+      "type": "string"
+    },
+    "discordId": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "lastUpdate": {
+      "type": "datetime"
+    },
+    "killDeathRatio": {
+      "type": "string"
+    },
+    "kills": {
+      "type": "integer"
+    },
+    "deaths": {
+      "type": "integer"
+    },
+    "damage": {
+      "type": "integer"
+    },
+    "assists": {
+      "type": "integer"
+    },
+    "headshots": {
+      "type": "integer"
+    },
+    "hits": {
+      "type": "integer"
+    },
+    "totalGamesPlayed": {
+      "type": "integer"
+    },
+    "sd_hc_kills": {
+      "type": "integer"
+    },
+    "sd_hc_deaths": {
+      "type": "integer"
+    },
+    "sd_hc_shots": {
+      "type": "integer"
+    },
+    "sd_hc_score": {
+      "type": "integer"
+    },
+    "sd_hc_timePlayed": {
+      "type": "integer"
+    },
+    "sd_hc_kdRatio": {
+      "type": "string"
+    },
+    "sd_hc_wins": {
+      "type": "integer"
+    },
+    "sd_hc_loss": {
+      "type": "integer"
+    },
+    "sd_hc_assists": {
+      "type": "integer"
+    },
+    "sd_hc_winLossRatio": {
+      "type": "string"
+    },
+    "sd_hc_avgKillsPerGame": {
+      "type": "string"
+    },
+    "sd_hc_totalGamesPlayed": {
+      "type": "integer"
+    },
+    "matches": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::match.match",
+      "inversedBy": "players"
+    },
+    "wins": {
+      "type": "integer"
+    },
+    "losses": {
+      "type": "integer"
+    },
+    "winLossRatio": {
+      "type": "string"
+    },
+    "level": {
+      "type": "integer"
+    },
+    "highestKillStreak": {
+      "type": "integer"
+    },
+    "highestKillsPerGame": {
+      "type": "integer"
+    },
+    "clan": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::clan.clan",
+      "inversedBy": "players"
+    },
+    "roles": {
+      "type": "text"
+    }
+  }
+}

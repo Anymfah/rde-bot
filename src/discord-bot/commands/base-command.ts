@@ -1,12 +1,13 @@
-import {Client} from "discord.js";
+import {CacheType, Client, Interaction, SlashCommandBuilder, SlashCommandOptionsOnlyBuilder} from "discord.js";
+import {Strapi} from "@strapi/types";
 
 
 export abstract class BaseCommand {
 
   /**
-   * Discord client instance
+   * Strapi instance
    */
-  public client: Client;
+  public strapi?: Strapi;
 
   /**
    * The name of the command
@@ -18,26 +19,29 @@ export abstract class BaseCommand {
    */
   public description = '';
 
-
-
-  /**
-   * @constructor
-   * @param client
-   */
-  public constructor(client: Client) {
-    this.client = client;
-    this.run().then(r => r);
+  public constructor(strapi?: Strapi) {
+    if (strapi)
+      this.strapi = strapi;
   }
 
   /**
    * Run the command
+   * @param interaction The interaction object
    */
-  public abstract run(): Promise<void>;
+  public abstract run(interaction: Interaction<CacheType>): Promise<void>;
+
+  /**
+   * Set the options of the command
+   * @param command
+   */
+  public options(command: SlashCommandBuilder):
+    SlashCommandBuilder | SlashCommandOptionsOnlyBuilder {
+    return command;
+  }
 
   public getApplicationCommand() {
-    return {
-      name: this.name,
-      description: this.description,
-    }
+    const command = new SlashCommandBuilder()
+      .setName(this.name).setDescription(this.description);
+    return this.options(command);
   }
 }

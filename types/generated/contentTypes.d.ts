@@ -788,6 +788,145 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
   };
 }
 
+export interface ApiClanClan extends Schema.CollectionType {
+  collectionName: 'clans';
+  info: {
+    singularName: 'clan';
+    pluralName: 'clans';
+    displayName: 'clan';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    name: Attribute.String;
+    tag: Attribute.String &
+      Attribute.SetMinMaxLength<{
+        maxLength: 7;
+      }>;
+    players: Attribute.Relation<
+      'api::clan.clan',
+      'oneToMany',
+      'api::player.player'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<'api::clan.clan', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<'api::clan.clan', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+  };
+}
+
+export interface ApiMatchMatch extends Schema.CollectionType {
+  collectionName: 'matches';
+  info: {
+    singularName: 'match';
+    pluralName: 'matches';
+    displayName: 'Match';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    matchId: Attribute.String & Attribute.Required & Attribute.Unique;
+    map: Attribute.String;
+    mapName: Attribute.String;
+    mode: Attribute.String;
+    players: Attribute.Relation<
+      'api::match.match',
+      'manyToMany',
+      'api::player.player'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::match.match',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::match.match',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiPlayerPlayer extends Schema.CollectionType {
+  collectionName: 'players';
+  info: {
+    singularName: 'player';
+    pluralName: 'players';
+    displayName: 'Player';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    nametag: Attribute.String;
+    unoid: Attribute.String & Attribute.Unique;
+    password: Attribute.Password;
+    discordAvatarId: Attribute.String;
+    discordId: Attribute.String & Attribute.Required & Attribute.Unique;
+    lastUpdate: Attribute.DateTime;
+    killDeathRatio: Attribute.String;
+    kills: Attribute.Integer;
+    deaths: Attribute.Integer;
+    damage: Attribute.Integer;
+    assists: Attribute.Integer;
+    headshots: Attribute.Integer;
+    hits: Attribute.Integer;
+    totalGamesPlayed: Attribute.Integer;
+    sd_hc_kills: Attribute.Integer;
+    sd_hc_deaths: Attribute.Integer;
+    sd_hc_shots: Attribute.Integer;
+    sd_hc_score: Attribute.Integer;
+    sd_hc_timePlayed: Attribute.Integer;
+    sd_hc_kdRatio: Attribute.String;
+    sd_hc_wins: Attribute.Integer;
+    sd_hc_loss: Attribute.Integer;
+    sd_hc_assists: Attribute.Integer;
+    sd_hc_winLossRatio: Attribute.String;
+    sd_hc_avgKillsPerGame: Attribute.String;
+    sd_hc_totalGamesPlayed: Attribute.Integer;
+    matches: Attribute.Relation<
+      'api::player.player',
+      'manyToMany',
+      'api::match.match'
+    >;
+    wins: Attribute.Integer;
+    losses: Attribute.Integer;
+    winLossRatio: Attribute.String;
+    level: Attribute.Integer;
+    highestKillStreak: Attribute.Integer;
+    highestKillsPerGame: Attribute.Integer;
+    clan: Attribute.Relation<
+      'api::player.player',
+      'manyToOne',
+      'api::clan.clan'
+    >;
+    roles: Attribute.Text;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::player.player',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::player.player',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 declare module '@strapi/types' {
   export module Shared {
     export interface ContentTypes {
@@ -806,6 +945,9 @@ declare module '@strapi/types' {
       'plugin::users-permissions.permission': PluginUsersPermissionsPermission;
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
+      'api::clan.clan': ApiClanClan;
+      'api::match.match': ApiMatchMatch;
+      'api::player.player': ApiPlayerPlayer;
     }
   }
 }

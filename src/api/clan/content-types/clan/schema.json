@@ -1,0 +1,29 @@
+{
+  "kind": "collectionType",
+  "collectionName": "clans",
+  "info": {
+    "singularName": "clan",
+    "pluralName": "clans",
+    "displayName": "clan"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": false
+    },
+    "tag": {
+      "type": "string",
+      "maxLength": 7
+    },
+    "players": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::player.player",
+      "mappedBy": "clan"
+    }
+  }
+}

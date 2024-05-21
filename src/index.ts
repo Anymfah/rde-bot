@@ -1,5 +1,5 @@
-import DiscordBot from "./discord-bot/discord-bot";
-import {App} from "./app";
+
+import App from "./app";
 
 export default {
   /**
