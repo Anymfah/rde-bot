@@ -5,6 +5,7 @@
     "rootDir": ".",
     "esModuleInterop": true,
     "skipLibCheck": true,
+    "experimentalDecorators": true
   },
   "include": [
     "./",

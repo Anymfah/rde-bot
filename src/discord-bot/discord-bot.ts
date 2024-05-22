@@ -1,18 +1,15 @@
-import {Client, REST, Routes, GatewayIntentBits, CacheType, Interaction} from "discord.js";
+import {Client, GatewayIntentBits, CacheType, Interaction} from "discord.js";
 import {env} from "@strapi/utils";
-import {BaseCommand} from "./commands/base-command";
-import {StatsCommand} from "./commands/stats.command";
-import {TestCommand} from "./commands/test.command";
-import {Strapi} from "@strapi/types";
-import {Inscription} from "./commands/inscription";
 import {COMMANDS} from "./constants/commands.const";
+import {Injectable, Inject} from "../decorators/injectable.decorator";
+import {StrapiService} from "../services/strapi.service";
 
-export default new class DiscordBot {
+@Injectable()
+export default class DiscordBot {
 
-  /**
-   * Strapi instance
-   */
-  public strapi: Strapi;
+  public constructor(
+    @Inject(StrapiService) private strapiService: StrapiService
+  ) {}
 
   /**
    * Discord client instance
@@ -26,7 +23,8 @@ export default new class DiscordBot {
   public commands = [];
 
   public async init() {
-    this.commands = this._commands.map(command => new command(this.strapi));
+    console.log('STRAPI SERVICE', this.strapiService);
+    this.commands = this._commands.map(command => new command(global.strapi));
     console.log('Discord bot initialized');
     await this.client.login(env('DISCORD_BOT_TOKEN'));
     this.client.on('ready', () => {

@@ -793,7 +793,8 @@ export interface ApiClanClan extends Schema.CollectionType {
   info: {
     singularName: 'clan';
     pluralName: 'clans';
-    displayName: 'clan';
+    displayName: 'Clan';
+    description: '';
   };
   options: {
     draftAndPublish: false;

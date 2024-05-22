@@ -1,6 +1,8 @@
 import {Strapi} from "@strapi/types";
 import DiscordBot from "./discord-bot/discord-bot";
 import CodApi from "./cod-api/cod-api";
+import {diContainer} from "./di-container";
+import {StrapiService} from "./services/strapi.service";
 
 
 export default class App {
@@ -13,7 +15,7 @@ export default class App {
   /**
    * Discord bot instance
    */
-  public discordBot: typeof DiscordBot;
+  public discordBot: DiscordBot;
 
   /**
    * CodApi instance
@@ -25,11 +27,15 @@ export default class App {
    * @param strapi
    */
   public constructor(strapi: Strapi) {
+    // Set global strapi instance
+    global.strapi = strapi as any;
+    diContainer.get(StrapiService);
+
     this.strapi = strapi;
     this.codApi = CodApi;
     this.codApi.strapi = strapi;
-    this.discordBot = DiscordBot;
-    this.discordBot.strapi = strapi;
+    this.discordBot = diContainer.get(DiscordBot);
+    //this.discordBot.strapi = strapi;
 
     this._init().then(r => r);
   }

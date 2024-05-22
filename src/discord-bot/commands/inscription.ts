@@ -30,12 +30,9 @@ export class Inscription extends BaseCommand {
           {name: 'Uno', value: platforms.Uno},
           {name: 'iOS', value: platforms.ios},
           {name: 'Toutes', value: platforms.All}
-
         )
     );
-
   }
-
 
   public async run(interaction: ChatInputCommandInteraction<CacheType>) {
     console.log('interaction', interaction);
@@ -63,7 +60,6 @@ export class Inscription extends BaseCommand {
 
     // Get the player from the database via discordId
     // If the player does not exist, create it
-
     const findUser = await this.strapi.entityService.findMany('api::player.player', {
       filters: {
         discordId: discordId
@@ -71,10 +67,6 @@ export class Inscription extends BaseCommand {
     });
 
     const user = findUser[0] ?? null;
-    console.log('user', user);
-
-
-
 
     if (!user) {
       await this.strapi.entityService.create('api::player.player', {
@@ -95,9 +87,6 @@ export class Inscription extends BaseCommand {
         } as Partial<Player>
       });
     }
-
-    console.log('discordUser', discordUser);
-    console.log('player', player);
     await interaction.reply('Joueur ' + player + ' enregistré');
   }
 }

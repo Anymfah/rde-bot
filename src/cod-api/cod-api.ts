@@ -29,7 +29,7 @@ export default new class CodApi {
 
   private async init() {
     // TODO: Comment only for develop faster
-    await this.login();
+    //await this.login();
   }
 
   public async login() {
