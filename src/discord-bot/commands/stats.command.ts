@@ -3,8 +3,11 @@ import {CacheType, ChatInputCommandInteraction, Interaction} from "discord.js";
 import {env} from "@strapi/utils";
 import {FullDataDto} from "../../cod-api/interfaces/data.dto";
 import CodApi from "../../cod-api/cod-api";
+import {inject} from "../../decorators/injectable.decorator";
 
 export class StatsCommand extends BaseCommand {
+
+  private codApi = inject(CodApi);
   public name = 'stats';
 
   public description = 'Montrez vos stats MW3';
@@ -17,7 +20,7 @@ export class StatsCommand extends BaseCommand {
       await interaction.reply('Vous n\'êtes pas enregistré, faites /inscription pour vous enregistrer');
       return;
     }
-    const data = await CodApi.getFullData(player.unoid);
+    const data = await this.codApi.getFullData(player.unoid);
 
     /*const matches = await CodApi.getRecentMatches(player.unoid);
     const matchTestId = matches.data.data.matches[0].matchId;*/

@@ -4,7 +4,7 @@
 
 import { factories } from '@strapi/strapi';
 import {CacheType, ChatInputCommandInteraction} from "discord.js";
-import {Player} from "../content-types/player/player";
+import {Player, Player_Plain} from "../content-types/player/player";
 
 export default factories.createCoreService('api::player.player', ({ strapi }) => ({
   /**
@@ -42,5 +42,22 @@ export default factories.createCoreService('api::player.player', ({ strapi }) =>
   async findByInteraction(interaction: ChatInputCommandInteraction<CacheType>): Promise<Player | null> {
     const discordId = interaction.user.id;
     return this.findByDiscordId(discordId);
+  },
+
+  /**
+   * Find players via their nametag
+   */
+  async findByNametag(nametag: string): Promise<Player_Plain | undefined> {
+    const findPlayer = await strapi.entityService.findMany('api::player.player', {
+      filters: {
+        nametag: nametag,
+      },
+    });
+
+    if (!findPlayer.length) {
+      return undefined;
+    }
+
+    return findPlayer[0] as Player_Plain;
   }
 }));

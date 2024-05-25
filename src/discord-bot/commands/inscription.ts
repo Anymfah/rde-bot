@@ -2,9 +2,14 @@ import {BaseCommand} from "./base-command";
 import {CacheType, ChatInputCommandInteraction, SlashCommandBuilder} from "discord.js";
 import {Misc, platforms} from "call-of-duty-api";
 import {Player} from "../../api/player/content-types/player/player";
+import {inject} from "../../decorators/injectable.decorator";
+import CodApi from "../../cod-api/cod-api";
 
 
 export class Inscription extends BaseCommand {
+
+  private codApi = inject(CodApi);
+
   public name = 'inscription';
 
   public description = 'Enregistrez un joueur';
@@ -39,12 +44,15 @@ export class Inscription extends BaseCommand {
     const discordUser = interaction.options.getUser('discord');
     const player = interaction.options.getString('joueur');
     const platform = interaction.options.getString('plateforme') ?? platforms.Activision;
-    const unoidData = await Misc.search(player, platform as platforms);
+    const unoidData = await this.codApi.searchPlayer(player, platform as platforms);
+
+    if (unoidData instanceof Error) {
+      await interaction.reply('Erreur lors de la recherche du joueur');
+      return;
+    }
 
     // Show roles as a string list (separated by commas)
     const roles = interaction.member['_roles'].join(',');
-
-    console.log('roles', roles);
 
     // @ts-ignore
     if (unoidData.status !== 'success' || unoidData.data.length === 0) {

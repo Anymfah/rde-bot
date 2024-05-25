@@ -125,6 +125,15 @@
     },
     "roles": {
       "type": "text"
+    },
+    "track": {
+      "type": "boolean"
+    },
+    "player_match_stat": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::player-match.player-match",
+      "mappedBy": "player"
     }
   }
 }

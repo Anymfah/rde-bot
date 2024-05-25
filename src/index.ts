@@ -8,7 +8,9 @@ export default {
    *
    * This gives you an opportunity to extend code.
    */
-  register(/*{ strapi }*/) {},
+  register({ strapi }) {
+    global.strapi = strapi as any;
+  },
 
   /**
    * An asynchronous bootstrap function that runs before

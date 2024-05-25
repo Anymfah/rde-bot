@@ -1,0 +1,67 @@
+{
+  "kind": "collectionType",
+  "collectionName": "player_matches",
+  "info": {
+    "singularName": "player-match",
+    "pluralName": "player-matches",
+    "displayName": "PlayerMatchStats",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "match": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::match.match",
+      "inversedBy": "player_match_stats"
+    },
+    "player": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::player.player",
+      "inversedBy": "player_match_stat"
+    },
+    "placement": {
+      "type": "integer"
+    },
+    "score": {
+      "type": "integer"
+    },
+    "kills": {
+      "type": "integer"
+    },
+    "deaths": {
+      "type": "integer"
+    },
+    "assists": {
+      "type": "integer"
+    },
+    "damage": {
+      "type": "integer"
+    },
+    "headshots": {
+      "type": "integer"
+    },
+    "shots": {
+      "type": "integer"
+    },
+    "hits": {
+      "type": "integer"
+    },
+    "highestKillStreak": {
+      "type": "integer"
+    },
+    "playerUtcConnectTimeSeconds": {
+      "type": "integer"
+    },
+    "playerUtcDisconnectTimeSeconds": {
+      "type": "integer"
+    },
+    "killDeathRatio": {
+      "type": "string"
+    }
+  }
+}

@@ -1,11 +1,13 @@
 import {env} from "@strapi/utils";
-import {login, ModernWarfare3, telescopeLogin} from 'call-of-duty-api';
+import {login, Misc, ModernWarfare3, platforms, telescopeLogin} from 'call-of-duty-api';
 import {Strapi} from "@strapi/types";
-import {FullDataDto} from "./interfaces/data.dto";
+import {FullDataDto, MatchInfoDto} from "./interfaces/data.dto";
 import {FullDataPlayer} from "./models/full-data.player";
 import {Player} from "../api/player/content-types/player/player";
+import {Injectable} from "../decorators/injectable.decorator";
 
-export default new class CodApi {
+@Injectable()
+export default class CodApi {
 
   /**
    * Logged in telescope
@@ -21,7 +23,7 @@ export default new class CodApi {
   /**
    * Strapi instance
    */
-  public strapi: Strapi;
+  public strapi: Strapi = global.strapi;
 
   public constructor() {
     this.init().then(r => r);
@@ -29,11 +31,16 @@ export default new class CodApi {
 
   private async init() {
     // TODO: Comment only for develop faster
-    //await this.login();
+    //await this.fullLogin();
   }
 
-  public async login() {
+  public async fullLogin() {
     console.log('Start login');
+    await this.telecopeLogin();
+    await this.codLogin();
+  }
+
+  public async telecopeLogin() {
     try {
       await telescopeLogin(env('COD_ACCOUNT'), env('COD_PASSWORD'));
       this.loggedInTeleScope = true;
@@ -41,7 +48,9 @@ export default new class CodApi {
     } catch (e) {
       console.error('Login error', e);
     }
+  }
 
+  public async codLogin() {
     try {
       login(env('COD_SSOTOKEN'));
       this.loggedInCOD = true;
@@ -66,7 +75,10 @@ export default new class CodApi {
     }
     if (!needsUpdate) {
       return player;
-    } else {
+    } else if (env('ALLOW_TELESCOPE_LOGIN') === 'true') {
+      if (!this.loggedInTeleScope) {
+        await this.telecopeLogin();
+      }
       const updatedData = await ModernWarfare3.fullData(unoId) as FullDataDto;
       //return updatedData;
       if (updatedData.status !== 'success') {
@@ -75,14 +87,44 @@ export default new class CodApi {
       const data = new FullDataPlayer(updatedData);
       // Update player data
       return (await this.strapi.entityService.update('api::player.player', player.id, {data: data as any}) as unknown) as Player;
+    } else {
+      console.log("\x1b[31m", '[ERROR] Telescope not logged in, retrieving obsolete data', "\x1b[0m")
+      return player;
     }
   }
 
-  public async getRecentMatches(unoId: string): Promise<FullDataDto> {
-    return await ModernWarfare3.matches(unoId) as Promise<FullDataDto>;
+  public async getRecentMatches(unoId: string): Promise<FullDataDto | Error> {
+    if (env('ALLOW_TELESCOPE_LOGIN') === 'true') {
+      if (!this.loggedInTeleScope) {
+        await this.telecopeLogin();
+      }
+      return await ModernWarfare3.matches(unoId) as FullDataDto;
+    } else {
+      console.log("\x1b[31m", '[ERROR] Telescope login disabled by env', "\x1b[0m")
+      return new Error('Telescope login disabled by env');
+    }
   }
 
-  public async getMatchInfo(unoId: string, matchId: string) {
-    return await ModernWarfare3.matchInfo(unoId, matchId);
+  public async getMatchInfo(unoId: string, matchId: string): Promise<MatchInfoDto | Error> {
+    if (env('ALLOW_TELESCOPE_LOGIN') === 'true') {
+      if (!this.loggedInTeleScope) {
+        await this.telecopeLogin();
+      }
+      return await ModernWarfare3.matchInfo(unoId, matchId) as MatchInfoDto;
+    } else {
+      console.log("\x1b[31m", '[ERROR] Telescope login disabled by env', "\x1b[0m")
+      return new Error('Telescope login disabled by env');
+    }
+  }
+
+  public async searchPlayer(player: string, platform: string) {
+    if (env('ALLOW_COD_LOGIN') === 'true') {
+      if (!this.loggedInCOD) {
+        await this.codLogin();
+      }
+      return await Misc.search(player, platform as platforms);
+    } else {
+      return new Error('COD login disabled by env');
+    }
   }
 }

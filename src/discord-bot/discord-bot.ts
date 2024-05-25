@@ -1,20 +1,22 @@
 import {Client, GatewayIntentBits, CacheType, Interaction} from "discord.js";
 import {env} from "@strapi/utils";
 import {COMMANDS} from "./constants/commands.const";
-import {Injectable, Inject} from "../decorators/injectable.decorator";
-import {StrapiService} from "../services/strapi.service";
+import {Injectable} from "../decorators/injectable.decorator";
 
 @Injectable()
 export default class DiscordBot {
 
-  public constructor(
-    @Inject(StrapiService) private strapiService: StrapiService
-  ) {}
-
   /**
    * Discord client instance
    */
-  public client: Client = new Client({intents: [GatewayIntentBits.Guilds]});
+  public client: Client = new Client({
+    intents: [GatewayIntentBits.Guilds],
+  });
+
+  /**
+   * Discord rDe guild
+   */
+  public guild;
 
   /**
    * Commands
@@ -22,17 +24,23 @@ export default class DiscordBot {
   private _commands = COMMANDS;
   public commands = [];
 
+  public constructor() {
+    console.log('Discord bot constructor called')
+  }
+
   public async init() {
-    console.log('STRAPI SERVICE', this.strapiService);
-    this.commands = this._commands.map(command => new command(global.strapi));
+    console.log('Initializing discord bot')
+    this.commands = this._commands.map(command => new command());
     console.log('Discord bot initialized');
-    await this.client.login(env('DISCORD_BOT_TOKEN'));
+
     this.client.on('ready', () => {
-      console.log(`Logged in as ${this.client.user?.tag}!`);
+      this.guild = this.client.guilds.cache.get(env('DISCORD_GUILD_ID'));
+      console.log(`Logged in as ${this.client.user?.tag}! For guild ${this.guild.name}`);
     });
     this.client.on('interactionCreate', async interaction => {
       this._interactionHandler(interaction);
     });
+    await this.client.login(env('DISCORD_BOT_TOKEN'));
   }
 
   /**

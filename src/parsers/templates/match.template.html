@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Match</title>
+  {{styles}}
+</head>
+<body>
+
+<div class="flex-center main-container" style="background-image: url({{bgMap}});">
+  <div class="main-wrapper flex-column">
+    <div class="border-fx"></div>
+    <div class="header flex">
+      <div class="part left flex-column">
+        <h2>{{mapName}}</h2>
+        <span class="mode">{{mode}}</span>
+      </div>
+      <div class="part right flex-column">
+        <span class="date">{{date}}</span>
+        <span class="duration">{{duration}}</span>
+      </div>
+    </div>
+    <div class="leaderboard flex-column gap-20">
+      <div class="team team-axis flex align-center gap-20{{axisWin}}">
+        <h1 class="team-score">{{axisScore}}</h1>
+        <table>
+          <thead>
+          <tr>
+            <th class="player"></th>
+            <th class="score">Score</th>
+            <th class="kills">Kills</th>
+          </tr>
+          </thead>
+          <tbody>
+          {{axisTeamPlayers}}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="team team-alliance flex align-center gap-20{{alliesWin}}">
+        <h1 class="team-score">{{alliesScore}}</h1>
+        <table>
+          <tbody>
+          {{alliesTeamPlayers}}
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

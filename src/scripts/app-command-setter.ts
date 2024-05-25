@@ -18,7 +18,7 @@ class AppCommandSetter {
   public constructor() {
     console.log('\x1b[36m%s\x1b[0m', 'Start setting commands');
     this.rest = new REST({version: '10'}).setToken(process.env.DISCORD_BOT_TOKEN);
-    this.commands = this._commands.map(command => new command(null));
+    this.commands = this._commands.map(command => new command());
     this._setGuildCommands(process.env.DISCORD_GUILD_ID).then(r => r);
   }
 

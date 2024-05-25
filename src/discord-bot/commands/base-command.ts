@@ -1,13 +1,13 @@
-import {CacheType, Client, Interaction, SlashCommandBuilder, SlashCommandOptionsOnlyBuilder} from "discord.js";
-import {Strapi} from "@strapi/types";
+import {CacheType, Interaction, SlashCommandBuilder, SlashCommandOptionsOnlyBuilder} from "discord.js";
+import {Injectable} from "../../decorators/injectable.decorator";
 
-
+@Injectable()
 export abstract class BaseCommand {
 
   /**
    * Strapi instance
    */
-  public strapi?: Strapi;
+  protected strapi = global.strapi;
 
   /**
    * The name of the command
@@ -18,11 +18,6 @@ export abstract class BaseCommand {
    * The description of the command
    */
   public description = '';
-
-  public constructor(strapi?: Strapi) {
-    if (strapi)
-      this.strapi = strapi;
-  }
 
   /**
    * Run the command

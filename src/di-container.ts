@@ -12,14 +12,8 @@ class DIContainer {
     }
 
     if (Reflect.getMetadata('injectable', token)) {
-      const injectedTokens: Array<{ token: any, parameterIndex: number }> = Reflect.getMetadata('injectedTokens', token) || [];
-      const constructorParams = Array(token.length).fill(undefined);
-      injectedTokens.forEach(({ token, parameterIndex }) => {
-        constructorParams[parameterIndex] = this.get(token);
-      });
-
-      const instance = new token(...constructorParams);
-      this.register(token, instance);
+      const instance = new token();
+      this.services.set(token, instance);
       return instance;
     }
 

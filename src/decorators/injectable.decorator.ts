@@ -1,5 +1,6 @@
 
 import 'reflect-metadata';
+import {diContainer} from "../di-container";
 
 
 /**
@@ -25,4 +26,9 @@ export function Inject(token: any): Function {
     existingInjectedTokens.push({ token, parameterIndex });
     Reflect.defineMetadata('injectedTokens', existingInjectedTokens, target);
   };
+}
+
+// Définir la fonction inject
+export function inject<T>(token: new (...args: any[]) => T): T {
+  return diContainer.get(token);
 }

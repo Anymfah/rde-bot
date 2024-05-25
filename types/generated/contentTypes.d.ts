@@ -825,6 +825,7 @@ export interface ApiMatchMatch extends Schema.CollectionType {
     singularName: 'match';
     pluralName: 'matches';
     displayName: 'Match';
+    description: '';
   };
   options: {
     draftAndPublish: false;
@@ -839,6 +840,17 @@ export interface ApiMatchMatch extends Schema.CollectionType {
       'manyToMany',
       'api::player.player'
     >;
+    player_match_stats: Attribute.Relation<
+      'api::match.match',
+      'oneToMany',
+      'api::player-match.player-match'
+    >;
+    axisScore: Attribute.Integer;
+    alliesScore: Attribute.Integer;
+    utcStartTime: Attribute.String;
+    utcEndTime: Attribute.String;
+    teamAxis: Attribute.JSON;
+    teamAllies: Attribute.JSON;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -911,6 +923,12 @@ export interface ApiPlayerPlayer extends Schema.CollectionType {
       'api::clan.clan'
     >;
     roles: Attribute.Text;
+    track: Attribute.Boolean;
+    player_match_stat: Attribute.Relation<
+      'api::player.player',
+      'oneToOne',
+      'api::player-match.player-match'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -921,6 +939,58 @@ export interface ApiPlayerPlayer extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::player.player',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiPlayerMatchPlayerMatch extends Schema.CollectionType {
+  collectionName: 'player_matches';
+  info: {
+    singularName: 'player-match';
+    pluralName: 'player-matches';
+    displayName: 'PlayerMatchStats';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    match: Attribute.Relation<
+      'api::player-match.player-match',
+      'manyToOne',
+      'api::match.match'
+    >;
+    player: Attribute.Relation<
+      'api::player-match.player-match',
+      'oneToOne',
+      'api::player.player'
+    >;
+    placement: Attribute.Integer;
+    score: Attribute.Integer;
+    kills: Attribute.Integer;
+    deaths: Attribute.Integer;
+    assists: Attribute.Integer;
+    damage: Attribute.Integer;
+    headshots: Attribute.Integer;
+    shots: Attribute.Integer;
+    hits: Attribute.Integer;
+    highestKillStreak: Attribute.Integer;
+    playerUtcConnectTimeSeconds: Attribute.Integer;
+    playerUtcDisconnectTimeSeconds: Attribute.Integer;
+    killDeathRatio: Attribute.String;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::player-match.player-match',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::player-match.player-match',
       'oneToOne',
       'admin::user'
     > &
@@ -949,6 +1019,7 @@ declare module '@strapi/types' {
       'api::clan.clan': ApiClanClan;
       'api::match.match': ApiMatchMatch;
       'api::player.player': ApiPlayerPlayer;
+      'api::player-match.player-match': ApiPlayerMatchPlayerMatch;
     }
   }
 }

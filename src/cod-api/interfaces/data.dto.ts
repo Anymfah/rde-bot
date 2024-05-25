@@ -1,4 +1,4 @@
-import {MatchData} from "./match.interface";
+import {RecentMatch} from "./recent-match.interface";
 import {GenericStats} from "./generic-stats.interface";
 import {WeaponStats} from "./weapon-stats.interface";
 import {ModeStats} from "./mode-stats.interface";
@@ -10,7 +10,7 @@ export interface FullDataDto {
   data: {
     success: string;
     data: {
-      matches: MatchData[];
+      matches: RecentMatch[];
       genericStats: GenericStats;
       weaponClassStats: WeaponStats[];
       modeStats: ModeStats[];
@@ -25,8 +25,6 @@ export interface MatchInfoDto {
   status: string;
   data: {
     success: string;
-    data: {
-      match: MatchInfo;
-    }
+    data: MatchInfo;
   }
 }

@@ -4,7 +4,8 @@
   "info": {
     "singularName": "match",
     "pluralName": "matches",
-    "displayName": "Match"
+    "displayName": "Match",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false
@@ -30,6 +31,30 @@
       "relation": "manyToMany",
       "target": "api::player.player",
       "mappedBy": "matches"
+    },
+    "player_match_stats": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::player-match.player-match",
+      "mappedBy": "match"
+    },
+    "axisScore": {
+      "type": "integer"
+    },
+    "alliesScore": {
+      "type": "integer"
+    },
+    "utcStartTime": {
+      "type": "string"
+    },
+    "utcEndTime": {
+      "type": "string"
+    },
+    "teamAxis": {
+      "type": "json"
+    },
+    "teamAllies": {
+      "type": "json"
     }
   }
 }

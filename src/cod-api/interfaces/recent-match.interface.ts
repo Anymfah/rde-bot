@@ -2,7 +2,7 @@ import {GenericStats} from "./generic-stats.interface";
 import {WeaponStats} from "./weapon-stats.interface";
 
 
-export interface MatchData {
+export interface RecentMatch {
   matchId: string;
   map: string;
   mapName: string;

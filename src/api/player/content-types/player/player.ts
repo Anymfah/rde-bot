@@ -2,8 +2,10 @@
 
 import { Match } from '../../../match/content-types/match/match';
 import { Clan } from '../../../clan/content-types/clan/clan';
+import { PlayerMatch } from '../../../player-match/content-types/player-match/player-match';
 import { Match_Plain } from '../../../match/content-types/match/match';
 import { Clan_Plain } from '../../../clan/content-types/clan/clan';
+import { PlayerMatch_Plain } from '../../../player-match/content-types/player-match/player-match';
 import { AdminPanelRelationPropertyModification } from '../../../../common/schemas-to-ts/AdminPanelRelationPropertyModification';
 
 export interface Player {
@@ -44,6 +46,8 @@ export interface Player {
     highestKillsPerGame?: number;
     clan?: { data: Clan };
     roles?: string;
+    track?: boolean;
+    player_match_stat?: { data: PlayerMatch };
   };
 }
 export interface Player_Plain {
@@ -83,6 +87,8 @@ export interface Player_Plain {
   highestKillsPerGame?: number;
   clan?: Clan_Plain;
   roles?: string;
+  track?: boolean;
+  player_match_stat?: PlayerMatch_Plain;
 }
 
 export interface Player_NoRelations {
@@ -122,6 +128,8 @@ export interface Player_NoRelations {
   highestKillsPerGame?: number;
   clan?: number;
   roles?: string;
+  track?: boolean;
+  player_match_stat?: number;
 }
 
 export interface Player_AdminPanelLifeCycle {
@@ -161,4 +169,6 @@ export interface Player_AdminPanelLifeCycle {
   highestKillsPerGame?: number;
   clan?: AdminPanelRelationPropertyModification<Clan_Plain>;
   roles?: string;
+  track?: boolean;
+  player_match_stat?: AdminPanelRelationPropertyModification<PlayerMatch_Plain>;
 }

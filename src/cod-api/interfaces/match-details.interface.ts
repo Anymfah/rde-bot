@@ -5,6 +5,7 @@ export interface MatchPlayer {
   damage: number;
   team: string;
   username: string;
+  player?: number;
 }
 export interface MatchInfo {
   mode: string;
