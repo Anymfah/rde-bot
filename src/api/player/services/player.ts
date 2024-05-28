@@ -37,6 +37,7 @@ export default factories.createCoreService('api::player.player', ({ strapi }) =>
 
   /**
    * Find player via interaction command author
+   * @deprecated use findByDiscordId instead
    * @param interaction
    */
   async findByInteraction(interaction: ChatInputCommandInteraction<CacheType>): Promise<Player | null> {

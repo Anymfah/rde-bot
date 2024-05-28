@@ -8,6 +8,7 @@
     "start": "strapi start",
     "build": "strapi build",
     "strapi": "strapi",
+    "cod-api": "ts-node src/cod-api/models/connexion.ts",
     "set-commands": "ts-node src/scripts/app-command-setter.ts"
   },
   "dependencies": {
@@ -16,6 +17,7 @@
     "@strapi/plugin-users-permissions": "4.24.2",
     "@strapi/strapi": "4.24.2",
     "anym-utility-css": "^1.1.0",
+    "axios": "^1.7.2",
     "call-of-duty-api": "^4.1.0",
     "discord.js": "^14.15.2",
     "dotenv": "^16.4.5",

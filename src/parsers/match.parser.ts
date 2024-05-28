@@ -21,6 +21,12 @@ export class MatchParser{
     let template = fs.readFileSync('./src/parsers/templates/match.template.html', 'utf8');
     let bgFileImage = './public/maps/' + this.match.map + '.jpg';
     if (!fs.existsSync(bgFileImage)) {
+      bgFileImage = './public/maps/' + this.match.map + '.webp';
+    }
+    if (!fs.existsSync(bgFileImage)) {
+      bgFileImage = './public/maps/' + this.match.map + '.png';
+    }
+    if (!fs.existsSync(bgFileImage)) {
       bgFileImage = './public/maps/snd.jpg';
     }
     // Date to number first

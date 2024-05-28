@@ -24,6 +24,5 @@ export class LastGameCommand extends BaseCommand {
     await interaction.followUp({files: [
       new AttachmentBuilder(await this.matchParser.parse(lastMatch))
       ]});
-    console.log('LAST MATCH', lastMatch);
   }
 }
