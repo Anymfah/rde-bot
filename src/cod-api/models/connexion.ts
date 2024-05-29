@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import axios, {AxiosResponse} from "axios";
 import {env} from "@strapi/utils";
+import {FullDataDto, MatchInfoDto} from "../interfaces/data.dto";
 dotenv.config();
 
 export class Connexion {
@@ -23,7 +24,7 @@ export class Connexion {
   };
   private readonly email: string;
   private readonly password: string;
-  private readonly unoId: string;
+  public readonly unoId: string;
   private unoUsername: string;
   private accessToken: string;
   private accessExpires: number;
@@ -35,15 +36,10 @@ export class Connexion {
     cookie: "new_SiteId=cod;ACT_SSO_LOCALE=en_US;country=US;"
   }
 
-  public constructor(username: string, password: string, unoId: string) {
-    this.email = username;
+  public constructor(email: string, password: string, unoId: string) {
+    this.email = email;
     this.password = password;
     this.unoId = unoId;
-
-    // TODO: FOR TESTING PURPOSES
-    this.login().then(r => r)
-    new Promise(resolve => setTimeout(resolve, 5000000))
-      .then(() => {});
   }
 
   public async login() {
@@ -66,7 +62,6 @@ export class Connexion {
           headers: this.baseHeaders
         });
       if (response.status === 200) {
-        console.log('Response', response.data);
         this.accessExpires = response.data.umbrella.accessExpires;
         this.accessToken = response.data.umbrella.accessToken;
         this.unoUsername = encodeURIComponent(response.data.umbrella.unoUsername);
@@ -79,14 +74,6 @@ export class Connexion {
     } catch (e) {
       return new Error('L\'identifiant ou le mot de passe est incorrect');
     }
-
-    // TODO: FOR TESTING PURPOSES
-    const fullData = await this.fullData();
-    console.log('Full data', fullData);
-    const matches = await this.matches();
-    console.log('Matches', matches);
-    const match = await this.match('-8806849168311851727');
-    console.log('Match', match);
   }
 
   private async request(endpoint: string) {
@@ -97,26 +84,31 @@ export class Connexion {
       return new Error('Telescope login disabled by env');
     }
     try {
-      return await axios.get(endpoint, {
+      const response: AxiosResponse<any> = await axios.get(endpoint, {
         headers: this.baseTelescopeHeaders
       });
+      if (response.status === 200) {
+        return response.data;
+      } else {
+        return new Error('Error while fetching data');
+      }
     } catch (e) {
       console.error('Error while fetching data', e);
       return new Error('Error while fetching data');
     }
   }
 
-  public async fullData() {
-    return await this.request(`${this.baseTelescopeUrl}${this.apiTelescopePath}/cr/v1/title/jup/lifetime?language=french&unoId=${this.unoUsername}`);
+  public async fullData(): Promise<FullDataDto | Error> {
+    return await this.request(`${this.baseTelescopeUrl}${this.apiTelescopePath}/cr/v1/title/jup/lifetime?language=french&unoId=${this.unoUsername}`) as FullDataDto | Error;
   }
 
-  public async matches() {
-    return await this.request(`${this.baseTelescopeUrl}${this.apiTelescopePath}/cr/v1/title/jup/matches?language=french&unoId=${this.unoUsername}`);
+  public async matches(): Promise<FullDataDto | Error> {
+    return await this.request(`${this.baseTelescopeUrl}${this.apiTelescopePath}/cr/v1/title/jup/matches?language=french&unoId=${this.unoUsername}`) as FullDataDto | Error;
   }
 
-  public match(matchId: string) {
-    return this.request(`${this.baseTelescopeUrl}${this.apiTelescopePath}/cr/v1/title/jup/match/${matchId}?language=french&unoId=${this.unoUsername}`);
+  public async match(matchId: string): Promise<MatchInfoDto | Error> {
+    return await this.request(`${this.baseTelescopeUrl}${this.apiTelescopePath}/cr/v1/title/jup/match/${matchId}?language=french&unoId=${this.unoUsername}`) as MatchInfoDto | Error;
   }
 }
 
-new Connexion(process.env.COD_ACCOUNT, process.env.COD_PASSWORD, process.env.COD_UNOID);
+//new Connexion(process.env.COD_ACCOUNT, process.env.COD_PASSWORD, process.env.COD_UNOID);

@@ -4,6 +4,7 @@ import CodApi from "./cod-api/cod-api";
 import {diContainer} from "./di-container";
 import {TrackerService} from "./discord-bot/services/tracker.service";
 import {MatchParser} from "./parsers/match.parser";
+import {CryptoService} from "./discord-bot/services/crypto.service";
 
 
 export default class App {
@@ -13,6 +14,7 @@ export default class App {
    */
   public strapi: Strapi;
 
+  public crypto = diContainer.get(CryptoService);
   public matchParser = diContainer.get(MatchParser);
   public trackerService = diContainer.get(TrackerService);
   public codApi = diContainer.get(CodApi);

@@ -12,8 +12,11 @@ export default {
       // Every 20 secs
       //rule: '*/20 * * * * *',
 
+      // Every 2 mins
+      rule: '*/2 * * * *',
+
       // Every 5 mins
-      rule: '*/5 * * * *',
+      //rule: '*/5 * * * *',
     }
   }
 };

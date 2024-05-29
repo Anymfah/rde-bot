@@ -13,7 +13,6 @@ export interface Player {
   attributes: {
     createdAt: Date;    updatedAt: Date;    publishedAt?: Date;    nametag?: string;
     unoid?: string;
-    password?: string;
     discordAvatarId?: string;
     discordId: string;
     lastUpdate?: Date;
@@ -48,13 +47,14 @@ export interface Player {
     roles?: string;
     track?: boolean;
     player_match_stat?: { data: PlayerMatch };
+    password?: string;
+    email?: string;
   };
 }
 export interface Player_Plain {
   id: number;
   createdAt: Date;  updatedAt: Date;  publishedAt?: Date;  nametag?: string;
   unoid?: string;
-  password?: string;
   discordAvatarId?: string;
   discordId: string;
   lastUpdate?: Date;
@@ -89,13 +89,14 @@ export interface Player_Plain {
   roles?: string;
   track?: boolean;
   player_match_stat?: PlayerMatch_Plain;
+  password?: string;
+  email?: string;
 }
 
 export interface Player_NoRelations {
   id: number;
   createdAt: Date;  updatedAt: Date;  publishedAt?: Date;  nametag?: string;
   unoid?: string;
-  password?: string;
   discordAvatarId?: string;
   discordId: string;
   lastUpdate?: Date;
@@ -130,13 +131,14 @@ export interface Player_NoRelations {
   roles?: string;
   track?: boolean;
   player_match_stat?: number;
+  password?: string;
+  email?: string;
 }
 
 export interface Player_AdminPanelLifeCycle {
   id: number;
   createdAt: Date;  updatedAt: Date;  publishedAt?: Date;  nametag?: string;
   unoid?: string;
-  password?: string;
   discordAvatarId?: string;
   discordId: string;
   lastUpdate?: Date;
@@ -171,4 +173,6 @@ export interface Player_AdminPanelLifeCycle {
   roles?: string;
   track?: boolean;
   player_match_stat?: AdminPanelRelationPropertyModification<PlayerMatch_Plain>;
+  password?: string;
+  email?: string;
 }

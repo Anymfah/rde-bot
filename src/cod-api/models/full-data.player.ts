@@ -32,6 +32,7 @@ export class FullDataPlayer {
   public sd_hc_totalGamesPlayed?: number;
 
   public constructor(dataDto: FullDataDto) {
+    console.log('data: ', dataDto.data.data);
     const data = dataDto.data.data;
     this.lastUpdate = new Date();
     this.killDeathRatio = data.genericStats.killDeathRatio;

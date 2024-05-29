@@ -19,9 +19,6 @@
       "type": "string",
       "unique": true
     },
-    "password": {
-      "type": "password"
-    },
     "discordAvatarId": {
       "type": "string"
     },
@@ -134,6 +131,12 @@
       "relation": "oneToOne",
       "target": "api::player-match.player-match",
       "mappedBy": "player"
+    },
+    "password": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
     }
   }
 }

@@ -4,10 +4,14 @@ import {Strapi} from "@strapi/types";
 import {FullDataDto, MatchInfoDto} from "./interfaces/data.dto";
 import {FullDataPlayer} from "./models/full-data.player";
 import {Player} from "../api/player/content-types/player/player";
-import {Injectable} from "../decorators/injectable.decorator";
+import {inject, Injectable} from "../decorators/injectable.decorator";
+import {Connexion} from "./models/connexion";
+import {CryptoService} from "../discord-bot/services/crypto.service";
 
 @Injectable()
 export default class CodApi {
+
+  private cryptoService = inject(CryptoService);
 
   /**
    * Logged in telescope
@@ -25,6 +29,11 @@ export default class CodApi {
    */
   public strapi: Strapi = global.strapi;
 
+  /**
+   * Connexions instances
+   */
+  private instances: Connexion[] = [];
+
   public constructor() {
     this.init().then(r => r);
   }
@@ -34,12 +43,31 @@ export default class CodApi {
     //await this.fullLogin();
   }
 
+  public async getInstance(unoId: string): Promise<Connexion | null>{
+    const instance = this.instances.find(i => i.unoId === unoId);
+    if (instance) {
+      return instance;
+    }
+    const player = await this.strapi.service('api::player.player').findByUnoId(unoId);
+    console.log('player:', player);
+    if (!player || !player.email || !player.password) {
+      return null;
+    }
+    const unencryptedPassword = this.cryptoService.decrypt(player.password);
+    const newConnexion = new Connexion(player.email, unencryptedPassword, unoId);
+    this.instances.push(newConnexion);
+    return newConnexion;
+  }
+
   public async fullLogin() {
     console.log('Start login');
     await this.telecopeLogin();
     await this.codLogin();
   }
 
+  /**
+   * @deprecated
+   */
   public async telecopeLogin() {
     try {
       await telescopeLogin(env('COD_ACCOUNT'), env('COD_PASSWORD'));
@@ -76,14 +104,16 @@ export default class CodApi {
     if (!needsUpdate) {
       return player;
     } else if (env('ALLOW_TELESCOPE_LOGIN') === 'true') {
-      if (!this.loggedInTeleScope) {
-        await this.telecopeLogin();
-      }
-      const updatedData = await ModernWarfare3.fullData(unoId) as FullDataDto;
-      //return updatedData;
-      if (updatedData.status !== 'success') {
+      const instance = await this.getInstance(unoId);
+      if (instance instanceof Error) {
         return new Error('Error while fetching data');
       }
+      const updatedData = await instance.fullData() as FullDataDto | Error;
+      //return updatedData;
+      if (updatedData instanceof Error) {
+        return new Error('Error while fetching data');
+      }
+      console.log('data:', updatedData);
       const data = new FullDataPlayer(updatedData);
       // Update player data
       return (await this.strapi.entityService.update('api::player.player', player.id, {data: data as any}) as unknown) as Player;
@@ -95,10 +125,16 @@ export default class CodApi {
 
   public async getRecentMatches(unoId: string): Promise<FullDataDto | Error> {
     if (env('ALLOW_TELESCOPE_LOGIN') === 'true') {
-      if (!this.loggedInTeleScope) {
-        await this.telecopeLogin();
+      const instance = await this.getInstance(unoId);
+      if (instance == null) {
+        return new Error('Error while fetching data');
       }
-      return await ModernWarfare3.matches(unoId) as FullDataDto;
+      const matches = await instance.matches() as FullDataDto | Error;
+      if (matches instanceof Error) {
+        return new Error('Error while fetching data');
+      } else {
+        return matches;
+      }
     } else {
       console.log("\x1b[31m", '[ERROR] Telescope login disabled by env', "\x1b[0m")
       return new Error('Telescope login disabled by env');
@@ -107,10 +143,16 @@ export default class CodApi {
 
   public async getMatchInfo(unoId: string, matchId: string): Promise<MatchInfoDto | Error> {
     if (env('ALLOW_TELESCOPE_LOGIN') === 'true') {
-      if (!this.loggedInTeleScope) {
-        await this.telecopeLogin();
+      const instance = await this.getInstance(unoId);
+      if (instance instanceof Error) {
+        return new Error('Error while fetching data');
       }
-      return await ModernWarfare3.matchInfo(unoId, matchId) as MatchInfoDto;
+      const match = await instance.match(matchId) as MatchInfoDto | Error;
+      if (match instanceof Error) {
+        return new Error('Error while fetching data');
+      } else {
+        return match;
+      }
     } else {
       console.log("\x1b[31m", '[ERROR] Telescope login disabled by env', "\x1b[0m")
       return new Error('Telescope login disabled by env');

@@ -882,7 +882,6 @@ export interface ApiPlayerPlayer extends Schema.CollectionType {
   attributes: {
     nametag: Attribute.String;
     unoid: Attribute.String & Attribute.Unique;
-    password: Attribute.Password;
     discordAvatarId: Attribute.String;
     discordId: Attribute.String & Attribute.Required & Attribute.Unique;
     lastUpdate: Attribute.DateTime;
@@ -929,6 +928,8 @@ export interface ApiPlayerPlayer extends Schema.CollectionType {
       'oneToOne',
       'api::player-match.player-match'
     >;
+    password: Attribute.String;
+    email: Attribute.String;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
