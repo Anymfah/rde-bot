@@ -56,7 +56,7 @@ export class MatchParser{
       transparent: false,
       html: template,
       puppeteerArgs: {
-        args: ['--no-sandbox', '--disable-setuid-sandbox'],
+        args: ['--no-sandbox'],
       },
     }) as Buffer;
   }
