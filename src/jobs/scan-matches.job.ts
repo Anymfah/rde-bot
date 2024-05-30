@@ -62,6 +62,7 @@ export class ScanMatchesJob extends BaseJob {
    * @private
    */
   private async _manageMatchesForPlayer(player: Player_Plain, recentMatches: RecentMatch[]) {
+    console.log('Matches:', recentMatches.length, 'for player', player.nametag, recentMatches);
     for (const match of recentMatches) {
       const matchExist = await this.strapi.service('api::match.match').matchExist(match.matchId);
       if (matchExist) {

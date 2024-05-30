@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Tomorrow:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Keania+One&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap");
 .flex {
   display: flex;
 }
@@ -299,6 +300,9 @@ body {
   --color-text: #dbdae5;
   --black: #090b13;
   --primary: #ff0b0b;
+  --secondary: #ff002f;
+  --tertiary: #d32a49;
+  --label: #7f7f9d;
   min-height: 700px;
   color: var(--color-text);
   background: var(--black);
@@ -316,7 +320,6 @@ body {
 
 .main-container {
   width: 100%;
-  padding: 100px;
   min-height: 1300px;
   background: #0e0f18;
 }
@@ -324,15 +327,81 @@ body {
 .main-ring-wrapper {
   width: 600px;
   height: 600px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
 }
 
-.outter-ring {
+.outer-ring {
+  --value: 70%;
+  position: absolute;
+  top: 0;
+  left: 0;
   border-radius: 50%;
   height: 100%;
   width: 100%;
-  background: conic-gradient(#ff1919 0 20%, #097cff 20% 100%);
-  mask-image: radial-gradient(circle at 50% 50%, transparent 0 50%, #000 50% 100%);
+  background: conic-gradient(var(--secondary) 0 var(--value), var(--black) var(--value) 100%);
+  mask-image: radial-gradient(circle at 50% 50%, transparent 270px, #000 270px);
+  padding: 30px;
+}
+
+.inner-ring {
+  --value: 60%;
+  margin: 40px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  height: calc(100% - 80px);
+  width: calc(100% - 80px);
+  background: conic-gradient(var(--tertiary) 0 var(--value), transparent 50% 100%);
+  mask-image: radial-gradient(circle at 50% 50%, transparent 246px, #000 246px);
+}
+
+.container-ring {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.container-ring .label {
+  font-size: 30px;
+  font-weight: 500;
+  margin-bottom: 10px;
+  color: var(--label);
+  text-transform: uppercase;
+}
+.container-ring .val {
+  font-size: 100px;
+  line-height: 1;
+  font-family: "Play", sans-serif;
+  margin-top: -10px;
+}
+.container-ring .ratio-kd {
+  color: var(--tertiary);
+}
+.container-ring .ratio-kd .val {
+  font-size: 60px;
+  margin-top: -5px;
+}
+
+.blocks-wrapper {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.block {
+  border: 1px solid #333;
+  width: 50%;
+  padding: 40px;
+}
+.block.top-middle {
+  position: absolute;
+  top: 150px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: 200px;
 }
 
 /*# sourceMappingURL=stats.css.map */
