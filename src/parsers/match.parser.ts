@@ -31,7 +31,7 @@ export class MatchParser{
     }
     // Date to number first
     template = replaceTokens(template, {
-      styles: '<style>' + fs.readFileSync('./src/parsers/templates/assets/main.css', 'utf8') + '</style>',
+      styles: '<style>' + fs.readFileSync('./src/parsers/templates/assets/match.css', 'utf8') + '</style>',
       bgMap: this._imageBuffer(bgFileImage),
       mapName: this.match.mapName,
       date: new Date(parseInt(this.match.utcStartTime, 10) * 1000).toLocaleString('fr-FR', {

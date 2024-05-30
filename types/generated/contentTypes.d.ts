@@ -831,7 +831,7 @@ export interface ApiMatchMatch extends Schema.CollectionType {
     draftAndPublish: false;
   };
   attributes: {
-    matchId: Attribute.String & Attribute.Required & Attribute.Unique;
+    matchId: Attribute.String & Attribute.Required;
     map: Attribute.String;
     mapName: Attribute.String;
     mode: Attribute.String;

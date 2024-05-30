@@ -35,6 +35,7 @@ export class ScanMatchesJob extends BaseJob {
         track: true
       }
     }) as Player_Plain[];
+    console.log('Players to scan', players.length);
     /**
      * Scan loop
      */
@@ -49,7 +50,7 @@ export class ScanMatchesJob extends BaseJob {
     }
 
     // Send discord notification for all new matches
-    this.reportMatches();
+    await this.reportMatches();
 
     this.devTest = true;
   }
@@ -62,7 +63,8 @@ export class ScanMatchesJob extends BaseJob {
    */
   private async _manageMatchesForPlayer(player: Player_Plain, recentMatches: RecentMatch[]) {
     for (const match of recentMatches) {
-      if (await this.strapi.service('api::match.match').matchExist(match.matchId)) {
+      const matchExist = await this.strapi.service('api::match.match').matchExist(match.matchId);
+      if (matchExist) {
         // TODO: Maybe we can fill data of the tracked player for this match, since it is advanced Data
         continue;
       }
