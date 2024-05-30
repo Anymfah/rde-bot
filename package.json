@@ -9,7 +9,7 @@
     "build": "strapi build",
     "strapi": "strapi",
     "cod-api": "ts-node src/cod-api/models/connexion.ts",
-    "set-commands": "ts-node src/scripts/app-command-setter.ts",
+    "set-commands": "ts-node src/scripts/app-command-setter.ts"
   },
   "dependencies": {
     "@strapi/plugin-cloud": "4.24.2",
