@@ -6,7 +6,6 @@ import nodeHtmlToImage from "node-html-to-image";
 import {MatchPlayer} from "../cod-api/interfaces/match-details.interface";
 import {ModesConstant} from "./templates/modes.constant";
 import puppeteerCore from "puppeteer-core/src/puppeteer-core";
-import chromium from "chrome-aws-lambda";
 
 
 @Injectable()
@@ -59,9 +58,7 @@ export class MatchParser{
       html: template,
       puppeteer: puppeteerCore,
       puppeteerArgs: {
-        //args: ['--no-sandbox'],
-        args: chromium.args,
-        executablePath: await chromium.executablePath,
+        args: ['--no-sandbox'],
       },
     }) as Buffer;
   }
