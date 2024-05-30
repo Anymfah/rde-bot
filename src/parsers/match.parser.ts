@@ -5,6 +5,8 @@ import {matchDuration, replaceTokens} from "./parser.utils";
 import nodeHtmlToImage from "node-html-to-image";
 import {MatchPlayer} from "../cod-api/interfaces/match-details.interface";
 import {ModesConstant} from "./templates/modes.constant";
+import puppeteerCore from "puppeteer-core/src/puppeteer-core";
+import chromium from "chrome-aws-lambda";
 
 
 @Injectable()
@@ -55,8 +57,11 @@ export class MatchParser{
     return await nodeHtmlToImage({
       transparent: false,
       html: template,
+      puppeteer: puppeteerCore,
       puppeteerArgs: {
-        args: ['--no-sandbox'],
+        //args: ['--no-sandbox'],
+        args: chromium.args,
+        executablePath: await chromium.executablePath,
       },
     }) as Buffer;
   }
