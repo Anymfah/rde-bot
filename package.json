@@ -5,8 +5,8 @@
   "description": "A Strapi application",
   "scripts": {
     "develop": "strapi develop",
-    "start": "strapi start",
-    "build": "strapi build",
+    "strapistart": "strapi start",
+    "strapibuild": "strapi build",
     "strapi": "strapi",
     "cod-api": "ts-node src/cod-api/models/connexion.ts",
     "set-commands": "ts-node src/scripts/app-command-setter.ts",
