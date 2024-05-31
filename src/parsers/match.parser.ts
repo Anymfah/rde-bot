@@ -58,7 +58,7 @@ export class MatchParser{
         transparent: false,
         html: template,
         puppeteerArgs: {
-          args: ['--no-sandbox'],
+          args: ['--no-sandbox', '--disable-setuid-sandbox'],
         },
       }) as Buffer;
       console.log('Image rendered');
