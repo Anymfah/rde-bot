@@ -21,8 +21,13 @@ export class LastGameCommand extends BaseCommand {
       return;
     }
 
+    const img = await this.matchParser.parse(lastMatch);
+    if (!img) {
+      await interaction.editReply('Il y a un problème avec le serveur du bot.');
+      return;
+    }
     await interaction.followUp({files: [
-      new AttachmentBuilder(await this.matchParser.parse(lastMatch))
+      new AttachmentBuilder(img)
       ]});
   }
 }

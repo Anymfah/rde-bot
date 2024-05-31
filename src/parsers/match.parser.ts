@@ -17,7 +17,7 @@ export class MatchParser{
     return await this.build();
   }
 
-  public async build() {
+  public async build(): Promise<Buffer | null> {
     let template = fs.readFileSync('./src/parsers/templates/match.template.html', 'utf8');
     let bgFileImage = './public/maps/' + this.match.map + '.jpg';
     if (!fs.existsSync(bgFileImage)) {
@@ -52,13 +52,20 @@ export class MatchParser{
       alliesTeamPlayers: this._renderTeam(JSON.parse(this.match.teamAllies)),
     });
 
-    return await nodeHtmlToImage({
-      transparent: false,
-      html: template,
-      puppeteerArgs: {
-        args: ['--no-sandbox'],
-      },
-    }) as Buffer;
+    try {
+      return await nodeHtmlToImage({
+        transparent: false,
+        html: template,
+        puppeteerArgs: {
+          args: ['--no-sandbox'],
+        },
+      }) as Buffer;
+    } catch (e) {
+      console.error(e);
+      return null;
+    }
+
+
   }
 
   private _renderTeam(team: MatchPlayer[]): string {
