@@ -53,13 +53,16 @@ export class MatchParser{
     });
 
     try {
-      return await nodeHtmlToImage({
+      console.log('Rendering image...');
+      const img = await nodeHtmlToImage({
         transparent: false,
         html: template,
         puppeteerArgs: {
           args: ['--no-sandbox'],
         },
       }) as Buffer;
+      console.log('Image rendered');
+      return img;
     } catch (e) {
       console.error(e);
       return null;
