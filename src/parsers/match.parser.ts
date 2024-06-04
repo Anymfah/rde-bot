@@ -6,7 +6,6 @@ import nodeHtmlToImage from "node-html-to-image";
 import {MatchPlayer} from "../cod-api/interfaces/match-details.interface";
 import {ModesConstant} from "./templates/modes.constant";
 
-
 @Injectable()
 export class MatchParser{
 
@@ -58,10 +57,11 @@ export class MatchParser{
         transparent: false,
         html: template,
         puppeteerArgs: {
+          headless: "new",
           args: ['--no-sandbox', '--disable-setuid-sandbox'],
         },
       }) as Buffer;
-      console.log('Image rendered');
+      //console.log('Image rendered', img);
       return img;
     } catch (e) {
       console.error(e);

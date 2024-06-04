@@ -35,6 +35,8 @@ export default class CodApi {
   private instances: Connexion[] = [];
 
   public constructor() {
+    console.log('COD LOGIN ENV:', env('ALLOW_COD_LOGIN'));
+    console.log('TELESCOPE LOGIN ENV:', env('ALLOW_TELESCOPE_LOGIN'));
     this.init().then(r => r);
   }
 
