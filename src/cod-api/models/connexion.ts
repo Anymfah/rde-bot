@@ -68,6 +68,7 @@ export class Connexion {
         this.baseTelescopeHeaders.authorization = `Bearer ${this.accessToken}`;
         this.loggedIn = true;
         console.log('\x1b[36m%s\x1b[0m', 'Login to COD success');
+        return response;
       } else {
         return new Error('L\'identifiant ou le mot de passe est incorrect');
       }

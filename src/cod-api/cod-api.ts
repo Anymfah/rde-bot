@@ -63,21 +63,7 @@ export default class CodApi {
 
   public async fullLogin() {
     console.log('Start login');
-    await this.telecopeLogin();
     await this.codLogin();
-  }
-
-  /**
-   * @deprecated
-   */
-  public async telecopeLogin() {
-    try {
-      await telescopeLogin(env('COD_ACCOUNT'), env('COD_PASSWORD'));
-      this.loggedInTeleScope = true;
-      console.log('\x1b[36m%s\x1b[0m', 'Login to telescope success');
-    } catch (e) {
-      console.error('Login error', e);
-    }
   }
 
   public async codLogin() {
@@ -88,6 +74,10 @@ export default class CodApi {
     } catch (e) {
       console.error('Login error', e);
     }
+  }
+
+  public async login(email: string, password: string) {
+
   }
 
   public async getFullData(unoId: string): Promise<Player | Error> {

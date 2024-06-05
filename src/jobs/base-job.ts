@@ -5,6 +5,7 @@ import CodApi from "../cod-api/cod-api";
 @Injectable()
 export abstract class BaseJob {
   private _initialized = false;
+  private _running = false;
   protected strapi: Strapi;
   protected codApi: CodApi;
 
@@ -18,11 +19,18 @@ export abstract class BaseJob {
     if (!this._initialized) {
       this.init();
     }
-    this.job();
+    if (this._running) {
+      console.log('Job already running, skipping');
+      return;
+    }
+    this._running = true;
+    this.job().then(r => {
+      this._running = false;
+    });
   }
 
   /**
    * The job to run
    */
-  public abstract job(): void;
+  public abstract job(): Promise<void>;
 }

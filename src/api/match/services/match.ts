@@ -15,7 +15,7 @@ export default factories.createCoreService('api::match.match', ({ strapi }) => (
   async matchExist(matchId: string): Promise<boolean> {
     const findMatch = await strapi.entityService.findMany('api::match.match', {
       filters: {
-        matchId: matchId,
+        matchId,
       },
     });
     return !!findMatch.length;

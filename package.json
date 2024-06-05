@@ -8,7 +8,7 @@
     "start": "strapi start",
     "build": "strapi build",
     "strapi": "strapi",
-    "cod-api": "ts-node src/cod-api/models/connexion.ts",
+    "test": "ts-node src/cod-api/test.ts",
     "set-commands": "ts-node src/scripts/app-command-setter.ts"
   },
   "dependencies": {

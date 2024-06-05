@@ -5,24 +5,20 @@ import {Player} from "../../api/player/content-types/player/player";
 import {inject} from "../../decorators/injectable.decorator";
 import CodApi from "../../cod-api/cod-api";
 import {CryptoService} from "../services/crypto.service";
+import {Connexion} from "../../cod-api/models/connexion";
 
 
-export class Inscription extends BaseCommand {
+export class Login extends BaseCommand {
 
   private codApi = inject(CodApi);
   private cryptoService = inject(CryptoService);
 
-  public name = 'inscription';
+  public name = 'login';
 
-  public description = 'Enregistrez un joueur';
+  public description = 'Se connecter à votre compte Activision pour récupérer vos stats';
 
   public options(command: SlashCommandBuilder) {
     return command
-      // Player Activision ID
-      .addStringOption(option => option.setName('tag')
-        .setDescription('Le tag du joueur à enregistrer')
-        .setRequired(true)
-      )
       // Player Activision email
       .addStringOption(option => option.setName('activision_email')
         .setDescription('L\'email dde votre compte Activision')
@@ -34,21 +30,7 @@ export class Inscription extends BaseCommand {
         .setDescription('Le mot de passe de votre compte Activision')
         .setDescription('Vos identifiants seront chiffrés et stockés en toute sécurité. Supprimez-les via /desinscrire.')
         .setRequired(true)
-      )
-    // Add the platform option (choice)
-      .addStringOption(option => option.setName('plateforme')
-        .setDescription('La plateforme du joueur')
-        .addChoices(
-          {name: 'Battle.net', value: platforms.Battlenet},
-          {name: 'Activision', value: platforms.Activision},
-          {name: 'Playstation', value: platforms.PSN},
-          {name: 'Xbox', value: platforms.XBOX},
-          {name: 'Steam', value: platforms.Steam},
-          {name: 'Uno', value: platforms.Uno},
-          {name: 'iOS', value: platforms.ios},
-          {name: 'Toutes', value: platforms.All}
-        )
-    );
+      );
   }
 
   public async run(interaction: ChatInputCommandInteraction<CacheType>) {
@@ -56,30 +38,23 @@ export class Inscription extends BaseCommand {
     await interaction.deferReply({ephemeral: true});
     await interaction.followUp('Enregistrement en cours...');
     const discordId = interaction.user.id;
-    const playerTag = interaction.options.getString('tag');
-    const platform = interaction.options.getString('plateforme') ?? platforms.Activision;
-    const unoidData = await this.codApi.searchPlayer(playerTag, platform as platforms);
     const activisionEmail = interaction.options.getString('activision_email');
     const activisionPassword = interaction.options.getString('activision_password');
 
     const encryptedActivisionPassword = this.cryptoService.encrypt(activisionPassword);
 
-    if (unoidData instanceof Error) {
-      await interaction.followUp('Erreur lors de la recherche du joueur');
+    const login = await new Connexion(activisionEmail, activisionPassword, '1234567890').login();
+
+    if (login instanceof Error) {
+      await interaction.followUp('Erreur lors de la connexion au compte Activision, vos identifiants sont incorrects');
       return;
     }
+    const playerTag = login.data.umbrella.unoUsername;
+    const unoid = login.data.umbrella.unoID;
+    await interaction.followUp('Connexion réussie');
 
     // Show roles as a string list (separated by commas)
     const roles = interaction.member['_roles'].join(',');
-
-    // @ts-ignore
-    if (unoidData.status !== 'success' || unoidData.data.length === 0) {
-      await interaction.editReply('Joueur non trouvé, le tag n\'existe pas');
-      return;
-    }
-    // @ts-ignore
-    const unoid = unoidData.data[0]?.accountId;
-    console.log('unoid', unoidData);
 
     // Get the player from the database via discordId
     // If the player does not exist, create it

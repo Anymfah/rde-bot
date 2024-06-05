@@ -12,22 +12,13 @@ import {Match_Plain} from "../api/match/content-types/match/match";
 export class ScanMatchesJob extends BaseJob {
 
   private discordBot = inject(DiscordBot);
-  private devTest = false;
   private matchParser = inject(MatchParser);
   public newMatchesIds: string[] = [];
 
   public async job() {
 
     console.log('Scan matches job started');
-
-    /*if (this.devTest) {
-      console.log('Dev test enabled, skipping job');
-      return;
-    }*/
-
     this.newMatchesIds = [];
-    //this.reportMatches();
-
 
     // Get All players with track enabled
     const players = await this.strapi.entityService.findMany('api::player.player', {
@@ -51,8 +42,6 @@ export class ScanMatchesJob extends BaseJob {
 
     // Send discord notification for all new matches
     await this.reportMatches();
-
-    this.devTest = true;
   }
 
   /**
@@ -100,9 +89,14 @@ export class ScanMatchesJob extends BaseJob {
         }
       });
 
-      // Add match to new matches
-      this.newMatchesIds.push(match.matchId);
-      console.log('New match created', newMatch);
+      // Add match to new matches (IF not exist)
+      if (!this.newMatchesIds.includes(newMatch.matchId)) {
+        this.newMatchesIds.push(match.matchId);
+        console.log('New match created', match.matchId, match.mapName);
+      } else {
+        console.log('Something is wrong in the code, match has been added multiple times : ', match.matchId);
+      }
+
     }
   }
 
