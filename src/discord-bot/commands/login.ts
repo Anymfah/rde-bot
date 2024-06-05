@@ -34,7 +34,6 @@ export class Login extends BaseCommand {
   }
 
   public async run(interaction: ChatInputCommandInteraction<CacheType>) {
-    console.log('interaction', interaction);
     await interaction.deferReply({ephemeral: true});
     await interaction.followUp('Enregistrement en cours...');
     const discordId = interaction.user.id;
@@ -51,7 +50,10 @@ export class Login extends BaseCommand {
     }
     const playerTag = login.data.umbrella.unoUsername;
     const unoid = login.data.umbrella.unoID;
-    await interaction.followUp('Connexion réussie');
+    await interaction.followUp({
+      content: 'Connexion réussie',
+      ephemeral: true
+    });
 
     // Show roles as a string list (separated by commas)
     const roles = interaction.member['_roles'].join(',');
