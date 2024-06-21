@@ -930,6 +930,11 @@ export interface ApiPlayerPlayer extends Schema.CollectionType {
     >;
     password: Attribute.String;
     email: Attribute.String;
+    sd_hc_hits: Attribute.Integer;
+    sd_hc_mapStats: Attribute.JSON;
+    weaponStats: Attribute.JSON;
+    shots: Attribute.Integer;
+    totalTimePlayed: Attribute.Integer;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<

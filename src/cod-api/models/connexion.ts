@@ -29,6 +29,7 @@ export class Connexion {
   private accessToken: string;
   private accessExpires: number;
   public loggedIn: boolean = false;
+  public sessionTime: Date;
 
   private baseHeaders = {
     "content-type": "application/json",
@@ -67,6 +68,7 @@ export class Connexion {
         this.unoUsername = encodeURIComponent(response.data.umbrella.unoUsername);
         this.baseTelescopeHeaders.authorization = `Bearer ${this.accessToken}`;
         this.loggedIn = true;
+        this.sessionTime = new Date();
         console.log('\x1b[36m%s\x1b[0m', 'Login to COD success');
         return response;
       } else {
@@ -78,7 +80,9 @@ export class Connexion {
   }
 
   private async request(endpoint: string) {
-    if (!this.loggedIn && env('ALLOW_TELESCOPE_LOGIN') === 'true') {
+    // Check if session is still valid (6 hours)
+    const sessionValid = this.sessionTime != null ? new Date().getTime() - this.sessionTime.getTime() < 21600000 : false;
+    if (!this.loggedIn && env('ALLOW_TELESCOPE_LOGIN') === 'true' && !sessionValid) {
       await this.login();
     } else if (!this.loggedIn) {
       console.log("\x1b[31m", '[ERROR] Telescope login disabled by env', "\x1b[0m")

@@ -3,7 +3,7 @@ import {login, Misc, ModernWarfare3, platforms, telescopeLogin} from 'call-of-du
 import {Strapi} from "@strapi/types";
 import {FullDataDto, MatchInfoDto} from "./interfaces/data.dto";
 import {FullDataPlayer} from "./models/full-data.player";
-import {Player} from "../api/player/content-types/player/player";
+import {Player, Player_Plain} from "../api/player/content-types/player/player";
 import {inject, Injectable} from "../decorators/injectable.decorator";
 import {Connexion} from "./models/connexion";
 import {CryptoService} from "../discord-bot/services/crypto.service";
@@ -80,7 +80,7 @@ export default class CodApi {
 
   }
 
-  public async getFullData(unoId: string): Promise<Player | Error> {
+  public async getFullData(unoId: string): Promise<Player_Plain | Error> {
     // First we check if the player is registered
     const player = await this.strapi.service('api::player.player').findByUnoId(unoId);
     if (!player) {
@@ -105,10 +105,9 @@ export default class CodApi {
       if (updatedData instanceof Error) {
         return new Error('Error while fetching data');
       }
-      console.log('data:', updatedData);
       const data = new FullDataPlayer(updatedData);
       // Update player data
-      return (await this.strapi.entityService.update('api::player.player', player.id, {data: data as any}) as unknown) as Player;
+      return (await this.strapi.entityService.update('api::player.player', player.id, {data: data as any}) as unknown) as Player_Plain;
     } else {
       console.log("\x1b[31m", '[ERROR] Telescope not logged in, retrieving obsolete data', "\x1b[0m")
       return player;

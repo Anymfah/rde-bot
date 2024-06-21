@@ -45,14 +45,13 @@ export class Login extends BaseCommand {
     const login = await new Connexion(activisionEmail, activisionPassword, '1234567890').login();
 
     if (login instanceof Error) {
-      await interaction.followUp('Erreur lors de la connexion au compte Activision, vos identifiants sont incorrects');
+      await interaction.editReply('Erreur lors de la connexion au compte Activision, vos identifiants sont incorrects');
       return;
     }
     const playerTag = login.data.umbrella.unoUsername;
-    const unoid = login.data.umbrella.unoID;
-    await interaction.followUp({
-      content: 'Connexion réussie',
-      ephemeral: true
+    const unoid = login.data.umbrella.unoID.toString();
+    await interaction.editReply({
+      content: 'Connexion réussie'
     });
 
     // Show roles as a string list (separated by commas)
@@ -80,6 +79,7 @@ export class Login extends BaseCommand {
           password: encryptedActivisionPassword
         }
       });
+      console.log('Nouveau joueur inscrit : ' + playerTag)
     } else {
       await this.strapi.entityService.update('api::player.player', user.id, {
         data: {
@@ -91,6 +91,7 @@ export class Login extends BaseCommand {
           password: encryptedActivisionPassword
         } as Partial<Player>
       });
+      console.log('Mise à jour du joueur : ' + playerTag)
     }
     await interaction.editReply('Joueur ' + playerTag + ' enregistré');
   }

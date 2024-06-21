@@ -137,6 +137,21 @@
     },
     "email": {
       "type": "string"
+    },
+    "sd_hc_hits": {
+      "type": "integer"
+    },
+    "sd_hc_mapStats": {
+      "type": "json"
+    },
+    "weaponStats": {
+      "type": "json"
+    },
+    "shots": {
+      "type": "integer"
+    },
+    "totalTimePlayed": {
+      "type": "integer"
     }
   }
 }

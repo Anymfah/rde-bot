@@ -5,6 +5,7 @@ import {Login} from "../commands/login";
 import {Track} from "../commands/track.command";
 import {LastGameCommand} from "../commands/last-game.command";
 import {Register} from "../commands/register";
+import {Untrack} from "../commands/untrack.command";
 
 type CommandConstructor<T extends BaseCommand> = new () => T;
 export const COMMANDS: CommandConstructor<BaseCommand>[] = [
@@ -12,6 +13,7 @@ export const COMMANDS: CommandConstructor<BaseCommand>[] = [
   TestCommand,
   Login,
   Track,
+  Untrack,
   LastGameCommand,
   Register
 ];

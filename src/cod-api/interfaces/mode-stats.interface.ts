@@ -9,7 +9,7 @@ export interface ModeStats {
   timePlayed: number;
   kdRatio: string;
   wins: number;
-  losses: number;
+  loss: number;
   assists: number;
   winLossRatio: string;
   scorePerMinute: number;

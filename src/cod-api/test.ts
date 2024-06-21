@@ -3,6 +3,8 @@ import {Connexion} from "./models/connexion";
 
 class TestApi {
 
+  //account = 'shaq.press@gmail.com';
+  //password: 'Mahira1405!';
   account = process.env.COD_ACCOUNT;
   password = process.env.COD_PASSWORD;
   instance: Connexion;
@@ -22,6 +24,9 @@ class TestApi {
   async runTests() {
     const login = await this.instance.login();
     console.log('Login:', login);
+
+    const fullData = await this.instance.fullData();
+    console.log('Full Data:', fullData);
   }
 }
 

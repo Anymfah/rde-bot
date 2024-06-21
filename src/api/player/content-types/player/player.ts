@@ -49,6 +49,11 @@ export interface Player {
     player_match_stat?: { data: PlayerMatch };
     password?: string;
     email?: string;
+    sd_hc_hits?: number;
+    sd_hc_mapStats?: any;
+    weaponStats?: any;
+    shots?: number;
+    totalTimePlayed?: number;
   };
 }
 export interface Player_Plain {
@@ -91,6 +96,11 @@ export interface Player_Plain {
   player_match_stat?: PlayerMatch_Plain;
   password?: string;
   email?: string;
+  sd_hc_hits?: number;
+  sd_hc_mapStats?: any;
+  weaponStats?: any;
+  shots?: number;
+  totalTimePlayed?: number;
 }
 
 export interface Player_NoRelations {
@@ -133,6 +143,11 @@ export interface Player_NoRelations {
   player_match_stat?: number;
   password?: string;
   email?: string;
+  sd_hc_hits?: number;
+  sd_hc_mapStats?: any;
+  weaponStats?: any;
+  shots?: number;
+  totalTimePlayed?: number;
 }
 
 export interface Player_AdminPanelLifeCycle {
@@ -175,4 +190,9 @@ export interface Player_AdminPanelLifeCycle {
   player_match_stat?: AdminPanelRelationPropertyModification<PlayerMatch_Plain>;
   password?: string;
   email?: string;
+  sd_hc_hits?: number;
+  sd_hc_mapStats?: any;
+  weaponStats?: any;
+  shots?: number;
+  totalTimePlayed?: number;
 }

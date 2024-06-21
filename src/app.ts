@@ -5,6 +5,7 @@ import {diContainer} from "./di-container";
 import {TrackerService} from "./discord-bot/services/tracker.service";
 import {MatchParser} from "./parsers/match.parser";
 import {CryptoService} from "./discord-bot/services/crypto.service";
+import {StatsParser} from "./parsers/stats.parser";
 
 
 export default class App {
@@ -16,6 +17,7 @@ export default class App {
 
   public crypto = diContainer.get(CryptoService);
   public matchParser = diContainer.get(MatchParser);
+  public statsParser = diContainer.get(StatsParser);
   public trackerService = diContainer.get(TrackerService);
   public codApi = diContainer.get(CodApi);
   public discordBot = diContainer.get(DiscordBot);

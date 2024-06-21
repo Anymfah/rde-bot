@@ -11,9 +11,9 @@ export interface WeaponStats {
   headshots: number;
   damage: number;
   hits: number;
-  kdRatio: number;
-  accuracy: number;
-  headshotPercentage: number;
+  kdRatio: string;
+  accuracy: string;
+  headshotPercentage: string;
   hudImage: string;
   imageIcon: string;
   label: string;

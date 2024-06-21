@@ -300,9 +300,10 @@ body {
   --color-text: #dbdae5;
   --black: #090b13;
   --primary: #ff0b0b;
-  --secondary: #ff002f;
-  --tertiary: #d32a49;
+  --secondary: #600def;
+  --tertiary: #9132f8;
   --label: #7f7f9d;
+  --label-dark: #242438;
   min-height: 700px;
   color: var(--color-text);
   background: var(--black);

@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Stats</title>
+  {{styles}}
+  <style>
+    body {
+      --sd_hc_kd_ratio_percent: {{sd_hc_kd_ratio_percent}};
+      --sd_hc_win_loss_ratio_percent: {{sd_hc_win_loss_ratio_percent}};
+    }
+
+  </style>
+  <link rel="stylesheet" href="assets/stats.css">
+</head>
+<body>
+<div class="main-container flex-center flex-wrap gap-20">
+  <div class="main-ring-wrapper">
+    <div class="outer-ring"></div>
+    <div class="inner-ring"></div>
+    <div class="container-ring flex-column flex-center">
+      <small class="label">R&D Hardcore</small>
+      <div class="ratio-wl flex-center flex-column">
+        <span class="label">W/L :</span><span class="val ratio-wl-value">{{sd_hc_winLossRatio}}</span>
+      </div>
+      <div class="ratio-kd flex-center flex-column">
+        <span class="label">K/D :</span><span class="val ratio-kd-value">{{sd_hc_kdRatio}}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="blocks-wrapper">
+    <div class="block top-middle flex-center">
+      <h1 class="name">{{nametag}}</h1>
+    </div>
+    <div class="block middle left flex-column gap-10">
+      <span class="label">Tous les mods</span>
+      <span class="kills"><b>{{kills}}</b> kills</span>
+      <span class="deaths"><b>{{deaths}}</b> deaths</span>
+      <span class="assists"><b>{{assists}}</b> assists</span>
+      <span class="accuracy"><b>{{accuracy}}%</b> précision</span>
+      <span class="total-wins"><b>{{wins}}</b> victoires</span>
+      <span class="total-losses"><b>{{losses}}</b> défaites</span>
+      <span class="played"><b>{{totalGamesPlayed}}</b> parties jouées</span>
+      <span class="played-time"><b>{{totalTimePlayed}}</b> heures de jeu</span>
+    </div>
+    <div class="block middle right flex-column align-end gap-10">
+      <span class="label">R&D Hardcore</span>
+      <span class="kills"><b>{{sd_hc_kills}}</b> kills</span>
+      <span class="deaths"><b>{{sd_hc_deaths}}</b> deaths</span>
+      <span class="avg-kill">~<b>{{sd_hc_avgKillsPerGame}}</b> kills/game</span>
+      <span class="total-wins"><b>{{sd_hc_wins}}</b> victoires</span>
+      <span class="total-losses"><b>{{sd_hc_losses}}</b> défaites</span>
+      <span class="played"><b>{{sd_hc_totalGamesPlayed}}</b> parties jouées</span>
+      <span class="played-time"><b>{{sd_hc_timePlayed}}</b> heures de jeu</span>
+    </div>
+  </div>
+</div>
+</body>
+</html>
