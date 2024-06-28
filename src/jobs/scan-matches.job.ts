@@ -34,7 +34,7 @@ export class ScanMatchesJob extends BaseJob {
       // Get full data
       const recentMatches = await this.codApi.getRecentMatches(player.unoid);
       if (recentMatches instanceof Error) {
-        console.error('Error while getting recent matches', recentMatches);
+        console.error('Error while getting recent matches', player.unoid, player.id);
         continue;
       }
       await this._manageMatchesForPlayer(player, recentMatches.data.data.matches);
@@ -61,42 +61,46 @@ export class ScanMatchesJob extends BaseJob {
       // Get match data by ID from COD API
       const matchData = await this.codApi.getMatchInfo(player.unoid, match.matchId);
       if (matchData instanceof Error) {
+        console.error('Error while getting match data', match.matchId);
         continue;
       }
-      // Get all players from match (found in DB)
-      const allies = await this._fillTeamPlayers(matchData.data.data.players.allies);
-      const axis = await this._fillTeamPlayers(matchData.data.data.players.axis);
+      try {
+        // Get all players from match (found in DB)
+        const allies = await this._fillTeamPlayers(matchData.data.data.players.allies);
+        const axis = await this._fillTeamPlayers(matchData.data.data.players.axis);
 
-      // Create match
-      const newMatch = await this.strapi.entityService.create('api::match.match', {
-        data: {
-          matchId: match.matchId,
-          map: matchData.data.data.map,
-          mode: matchData.data.data.mode,
-          mapName: match.mapName,
-          players: [...allies, ...axis]
-            .filter(p => p.player !== undefined)
-            .map(p => p.player),
+        // Create match
+        const newMatch = await this.strapi.entityService.create('api::match.match', {
+          data: {
+            matchId: match.matchId,
+            map: matchData.data.data.map,
+            mode: matchData.data.data.mode,
+            mapName: match.mapName,
+            players: [...allies, ...axis]
+              .filter(p => p.player !== undefined)
+              .map(p => p.player),
 
-          axisScore: matchData.data.data.axisScore,
-          alliesScore: matchData.data.data.alliesScore,
-          utcStartTime: matchData.data.data.utcStartTime,
-          utcEndTime: matchData.data.data.utcEndTime,
+            axisScore: matchData.data.data.axisScore,
+            alliesScore: matchData.data.data.alliesScore,
+            utcStartTime: matchData.data.data.utcStartTime,
+            utcEndTime: matchData.data.data.utcEndTime,
 
-          // Json data
-          teamAxis: JSON.stringify(axis),
-          teamAllies: JSON.stringify(allies),
+            // Json data
+            teamAxis: JSON.stringify(axis),
+            teamAllies: JSON.stringify(allies),
+          }
+        });
+
+        // Add match to new matches (IF not exist)
+        if (!this.newMatchesIds.includes(newMatch.matchId)) {
+          this.newMatchesIds.push(match.matchId);
+          console.log('New match created', match.matchId, match.mapName);
+        } else {
+          console.log('Something is wrong in the code, match has been added multiple times : ', match.matchId);
         }
-      });
-
-      // Add match to new matches (IF not exist)
-      if (!this.newMatchesIds.includes(newMatch.matchId)) {
-        this.newMatchesIds.push(match.matchId);
-        console.log('New match created', match.matchId, match.mapName);
-      } else {
-        console.log('Something is wrong in the code, match has been added multiple times : ', match.matchId);
+      } catch (error) {
+        console.error('Error while rendering match image', error);
       }
-
     }
   }
 
